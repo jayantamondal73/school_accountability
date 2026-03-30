@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="classic">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1a1a2e">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="TeacherTrack">
+<title>TeacherTrack — School Accountability System</title>
+
+<script>
+const manifestData = {
+  name: "TeacherTrack — School Accountability",
+  short_name: "TeacherTrack",
+  start_url: "./", display: "standalone",
+  background_color: "#1a1a2e", theme_color: "#1a1a2e",
+  icons: [{ src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'%3E%3Crect width='192' height='192' rx='32' fill='%231a1a2e'/%3E%3Ctext x='96' y='130' text-anchor='middle' font-size='110' font-family='serif'%3E📋%3C/text%3E%3C/svg%3E", sizes: "192x192", type: "image/svg+xml" }]
+};
+const blob = new Blob([JSON.stringify(manifestData)], {type:'application/json'});
+document.write('<link rel="manifest" href="' + URL.createObjectURL(blob) + '">');
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+/* ===== THEMES ===== */
+:root, [data-theme="classic"] {
+  --hdr: #1a1a2e; --hdr2: #16213e; --hdr-acc: #e2b04a; --hdr-acc2: #f0c97a;
+  --acc: #0f3460; --acc-light: #1a4a7a;
+  --bg: #f5f3ee; --bg2: #eeebe4; --bg3: #e8e5dc;
+  --surface: #ffffff; --surface2: #faf8f3;
+  --ink: #1c1c1e; --ink-soft: #3d3d40; --ink-muted: #6e6e73; --ink-ghost: #aeaeb2;
+  --border: rgba(28,28,30,0.12); --border-strong: rgba(28,28,30,0.25);
+  --shadow: 0 2px 12px rgba(0,0,0,0.08); --shadow-lg: 0 8px 32px rgba(0,0,0,0.15);
+  --radius-sm: 6px; --radius: 10px; --radius-lg: 16px;
+  --font: 'DM Sans', system-ui, sans-serif;
+  --font-display: 'DM Serif Display', Georgia, serif;
+  --tab-active-color: var(--hdr-acc2); --tab-active-border: var(--hdr-acc);
+}
+[data-theme="forest"] {
+  --hdr: #1b3a2d; --hdr2: #14301f; --hdr-acc: #7ec891; --hdr-acc2: #a8ddb5;
+  --acc: #2d6a4f; --acc-light: #40916c;
+  --bg: #f0f7f2; --bg2: #e2f0e7; --bg3: #d3e8da;
+  --surface: #ffffff; --surface2: #f5fbf7;
+  --ink: #1b2d22; --ink-soft: #2d4a38; --ink-muted: #52735e; --ink-ghost: #9ab8a4;
+  --border: rgba(27,58,45,0.14); --border-strong: rgba(27,58,45,0.28);
+  --shadow: 0 2px 12px rgba(0,0,0,0.07); --shadow-lg: 0 8px 32px rgba(0,0,0,0.13);
+  --tab-active-color: var(--hdr-acc2); --tab-active-border: var(--hdr-acc);
+}
+[data-theme="slate"] {
+  --hdr: #1e293b; --hdr2: #0f172a; --hdr-acc: #38bdf8; --hdr-acc2: #7dd3fc;
+  --acc: #0369a1; --acc-light: #0284c7;
+  --bg: #f1f5f9; --bg2: #e2e8f0; --bg3: #cbd5e1;
+  --surface: #ffffff; --surface2: #f8fafc;
+  --ink: #0f172a; --ink-soft: #1e293b; --ink-muted: #64748b; --ink-ghost: #94a3b8;
+  --border: rgba(15,23,42,0.12); --border-strong: rgba(15,23,42,0.22);
+  --shadow: 0 2px 12px rgba(0,0,0,0.07); --shadow-lg: 0 8px 32px rgba(0,0,0,0.13);
+  --tab-active-color: var(--hdr-acc2); --tab-active-border: var(--hdr-acc);
+}
+[data-theme="rose"] {
+  --hdr: #4a1942; --hdr2: #3b1234; --hdr-acc: #f9a8d4; --hdr-acc2: #fbcfe8;
+  --acc: #9d174d; --acc-light: #be185d;
+  --bg: #fdf2f8; --bg2: #fce7f3; --bg3: #fbcfe8;
+  --surface: #ffffff; --surface2: #fdf6fb;
+  --ink: #3b0764; --ink-soft: #6b21a8; --ink-muted: #a855f7; --ink-ghost: #d8b4fe;
+  --border: rgba(74,25,66,0.13); --border-strong: rgba(74,25,66,0.25);
+  --shadow: 0 2px 12px rgba(0,0,0,0.07); --shadow-lg: 0 8px 32px rgba(0,0,0,0.13);
+  --tab-active-color: var(--hdr-acc2); --tab-active-border: var(--hdr-acc);
+}
+[data-theme="peach"] {
+  --hdr: #5c3317; --hdr2: #4a2910; --hdr-acc: #f4c28b; --hdr-acc2: #fde3c4;
+  --acc: #a0522d; --acc-light: #c0622d;
+  --bg: #fff8f2; --bg2: #fdf0e4; --bg3: #fae4cd;
+  --surface: #ffffff; --surface2: #fffbf7;
+  --ink: #2d1a0e; --ink-soft: #5a3520; --ink-muted: #8a6040; --ink-ghost: #c4a080;
+  --border: rgba(92,51,23,0.12); --border-strong: rgba(92,51,23,0.22);
+  --shadow: 0 2px 12px rgba(0,0,0,0.06); --shadow-lg: 0 8px 32px rgba(0,0,0,0.11);
+  --tab-active-color: var(--hdr-acc2); --tab-active-border: var(--hdr-acc);
+}
+[data-theme="sky"] {
+  --hdr: #1a3a5c; --hdr2: #122a47; --hdr-acc: #90caf9; --hdr-acc2: #bbdefb;
+  --acc: #0d5fa0; --acc-light: #1976d2;
+  --bg: #f3f8fd; --bg2: #e3f0fb; --bg3: #cce4f7;
+  --surface: #ffffff; --surface2: #f7fbff;
+  --ink: #0d2137; --ink-soft: #1a3a5c; --ink-muted: #4a6e8a; --ink-ghost: #8ab0cc;
+  --border: rgba(26,58,92,0.12); --border-strong: rgba(26,58,92,0.22);
+  --shadow: 0 2px 12px rgba(0,0,0,0.06); --shadow-lg: 0 8px 32px rgba(0,0,0,0.11);
+  --tab-active-color: var(--hdr-acc2); --tab-active-border: var(--hdr-acc);
+}
+[data-theme="mint"] {
+  --hdr: #1a4a3a; --hdr2: #10352a; --hdr-acc: #80cbb0; --hdr-acc2: #b2e4d4;
+  --acc: #1f7a5a; --acc-light: #28a068;
+  --bg: #f2fbf7; --bg2: #e2f6ee; --bg3: #cceedf;
+  --surface: #ffffff; --surface2: #f5fcf8;
+  --ink: #0e2a20; --ink-soft: #1a4a3a; --ink-muted: #3d7a60; --ink-ghost: #80b8a0;
+  --border: rgba(26,74,58,0.12); --border-strong: rgba(26,74,58,0.22);
+  --shadow: 0 2px 12px rgba(0,0,0,0.06); --shadow-lg: 0 8px 32px rgba(0,0,0,0.11);
+  --tab-active-color: var(--hdr-acc2); --tab-active-border: var(--hdr-acc);
+}
+[data-theme="night"] {
+  --hdr: #111827; --hdr2: #0d1117; --hdr-acc: #fbbf24; --hdr-acc2: #fcd34d;
+  --acc: #1f2937; --acc-light: #374151;
+  --bg: #1f2937; --bg2: #111827; --bg3: #0d1117;
+  --surface: #273447; --surface2: #1e2a3a;
+  --ink: #f1f5f9; --ink-soft: #cbd5e1; --ink-muted: #94a3b8; --ink-ghost: #475569;
+  --border: rgba(255,255,255,0.08); --border-strong: rgba(255,255,255,0.15);
+  --shadow: 0 2px 12px rgba(0,0,0,0.3); --shadow-lg: 0 8px 32px rgba(0,0,0,0.4);
+  --tab-active-color: var(--hdr-acc2); --tab-active-border: var(--hdr-acc);
+}
+[data-theme="night"] input, [data-theme="night"] select, [data-theme="night"] textarea {
+  background: #1e2a3a !important; color: #f1f5f9 !important;
+}
+[data-theme="night"] input[type=radio], [data-theme="night"] input[type=checkbox] { accent-color: #fbbf24; }
+
+/* Semantic colours — fixed across all themes */
+:root {
+  --red: #c0392b; --red-pale: #fdecea;
+  --orange: #e67e22; --orange-pale: #fef3e7;
+  --blue: #2471a3; --blue-pale: #eaf4fb;
+  --green: #1e8449; --green-pale: #eafaf1;
+  --pink: #a93226; --pink-pale: #fce4e4;
+  --purple: #6c3483; --purple-pale: #f5eef8;
+  --teal: #148f77; --teal-pale: #e8f8f5;
+  --indigo: #1a5276; --indigo-pale: #d6eaf8;
+}
+
+/* ===== RESET & BASE ===== */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { margin: 0 !important; padding: 0 !important; }
+html { font-size: 15px; overflow-x: hidden; background: var(--bg); }
+body { font-family: var(--font); background: var(--bg); color: var(--ink); min-height: 100vh; overscroll-behavior: none; -webkit-font-smoothing: antialiased; transition: background .3s, color .3s; }
+
+/* ===== HEADER ===== */
+.app-header { background: var(--hdr); color: #fff; padding: 16px 20px 0; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 20px rgba(0,0,0,0.3); width: 100%; }
+.header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.header-title { font-family: var(--font-display); font-size: 1.35rem; letter-spacing: 0.01em; color: var(--hdr-acc2); }
+.header-sub { font-size: 0.72rem; color: rgba(255,255,255,0.5); margin-top: 1px; }
+.header-actions { display: flex; gap: 6px; align-items: center; }
+.icon-btn { background: rgba(255,255,255,0.1); border: none; border-radius: var(--radius-sm); color: #fff; cursor: pointer; padding: 7px 11px; font-size: 0.78rem; font-family: var(--font); font-weight: 500; transition: background .15s; display: flex; align-items: center; gap: 5px; white-space: nowrap; }
+.icon-btn:hover { background: rgba(255,255,255,0.18); }
+.icon-btn.gold { background: var(--hdr-acc); color: var(--hdr); font-weight: 600; }
+.icon-btn.gold:hover { background: var(--hdr-acc2); }
+
+/* Theme picker */
+.theme-wrap { position: relative; }
+.theme-btn { background: rgba(255,255,255,0.12); border: none; border-radius: var(--radius-sm); color: #fff; cursor: pointer; padding: 7px 10px; font-size: 0.82rem; }
+.theme-dropdown { position: absolute; top: calc(100% + 8px); right: 0; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius); box-shadow: var(--shadow-lg); display: none; z-index: 300; min-width: 150px; overflow: hidden; }
+.theme-dropdown.open { display: block; }
+.theme-option { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; font-size: 0.83rem; color: var(--ink); transition: background .12s; border: none; background: none; width: 100%; font-family: var(--font); text-align: left; }
+.theme-option:hover { background: var(--bg); }
+.theme-swatch { width: 16px; height: 16px; border-radius: 50%; border: 2px solid var(--border-strong); flex-shrink: 0; }
+.theme-option.active { font-weight: 600; }
+
+/* Nav tabs */
+.nav-tabs { display: flex; overflow-x: auto; scrollbar-width: none; }
+.nav-tabs::-webkit-scrollbar { display: none; }
+.nav-tab { flex-shrink: 0; padding: 10px 16px; color: rgba(255,255,255,0.5); font-size: 0.78rem; font-weight: 500; cursor: pointer; border: none; background: none; font-family: var(--font); border-bottom: 2px solid transparent; transition: all .15s; white-space: nowrap; }
+.nav-tab.active { color: var(--tab-active-color); border-bottom-color: var(--tab-active-border); }
+.nav-tab:hover:not(.active) { color: rgba(255,255,255,0.8); }
+
+/* ===== MAIN ===== */
+.main { padding: 20px; max-width: 860px; margin: 0 auto; }
+.page { display: none; }
+.page.active { display: block; }
+
+/* ===== CARDS ===== */
+.card { background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 16px; overflow: hidden; }
+.card-header { padding: 14px 18px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.card-title { font-size: 0.82rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-muted); }
+.card-body { padding: 16px 18px; }
+
+/* ===== STATS ===== */
+.stats-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 16px; }
+.stat-card { background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 14px 16px; box-shadow: var(--shadow); }
+.stat-num { font-size: 1.9rem; font-weight: 600; line-height: 1; font-family: var(--font-display); color: var(--ink); }
+.stat-label { font-size: 0.72rem; color: var(--ink-muted); margin-top: 4px; font-weight: 500; }
+.stat-card.accent { background: var(--hdr); }
+.stat-card.accent .stat-num { color: var(--hdr-acc2); }
+.stat-card.accent .stat-label { color: rgba(255,255,255,0.5); }
+.stat-card.warn { background: var(--red-pale); }
+.stat-card.warn .stat-num { color: var(--red); }
+.stat-card.good { background: var(--green-pale); }
+.stat-card.good .stat-num { color: var(--green); }
+
+/* ===== FORMS — with overflow fix ===== */
+.form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+.form-group { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+.form-group.span2 { grid-column: span 2; }
+.form-group.full { grid-column: 1 / -1; }
+label.lbl { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted); }
+input, select, textarea { font-family: var(--font); font-size: 0.88rem; padding: 9px 12px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); background: var(--surface); color: var(--ink); transition: border-color .15s, box-shadow .15s; -webkit-appearance: none; appearance: none; width: 100%; min-width: 0; max-width: 100%; }
+input:focus, select:focus, textarea:focus { outline: none; border-color: var(--acc); box-shadow: 0 0 0 3px rgba(15,52,96,0.1); }
+textarea { resize: vertical; min-height: 72px; }
+select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M0 0l6 8 6-8z' fill='%236e6e73'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; }
+input[type=date], input[type=time] { max-width: 100% !important; min-width: 0 !important; }
+.radio-group { display: flex; gap: 10px; flex-wrap: wrap; }
+.radio-opt { display: flex; align-items: center; gap: 0; cursor: pointer; }
+.radio-opt input[type=radio] { display: none; }
+.radio-opt .radio-face {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 7px 14px; border-radius: 20px;
+  border: 2px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--ink-soft);
+  font-size: 0.85rem; font-weight: 500;
+  transition: all .15s;
+  user-select: none;
+}
+.radio-opt input[type=radio]:checked + .radio-face {
+  border-color: var(--acc);
+  background: var(--acc);
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+}
+
+/* ===== DATE BAR ===== */
+.date-bar { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: end; margin-bottom: 16px; background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border); padding: 14px 16px; box-shadow: var(--shadow); overflow: hidden; }
+.date-bar .form-group { min-width: 0; overflow: hidden; }
+
+/* ===== BUTTONS ===== */
+.btn { font-family: var(--font); font-weight: 500; padding: 9px 18px; border-radius: var(--radius-sm); border: 1px solid var(--border-strong); cursor: pointer; font-size: 0.85rem; transition: all .15s; display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.btn-primary { background: var(--hdr); color: #fff; border-color: var(--hdr); }
+.btn-primary:hover { background: var(--acc-light); }
+.btn-gold { background: var(--hdr-acc); color: var(--hdr); border-color: var(--hdr-acc); font-weight: 600; }
+.btn-gold:hover { background: var(--hdr-acc2); }
+.btn-outline { background: transparent; color: var(--ink-soft); border-color: var(--border-strong); }
+.btn-outline:hover { background: var(--bg); }
+.btn-danger { background: var(--red-pale); color: var(--red); border-color: rgba(192,57,43,0.3); }
+.btn-danger:hover { background: #fbd5d0; }
+.btn-sm { padding: 5px 11px; font-size: 0.78rem; }
+.btn-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+
+/* ===== TABLES ===== */
+.tbl-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+table { width: 100%; border-collapse: collapse; font-size: 0.83rem; }
+thead th { text-align: left; padding: 10px 12px; background: var(--bg); border-bottom: 1px solid var(--border); font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--ink-muted); white-space: nowrap; }
+tbody td { padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: middle; color: var(--ink); }
+tbody tr:last-child td { border-bottom: none; }
+tbody tr:hover td { background: var(--bg); }
+.t-name { font-weight: 600; color: var(--ink); }
+.t-sub { font-size: 0.75rem; color: var(--ink-muted); }
+.t-note { font-size: 0.78rem; color: var(--ink-soft); max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+/* ===== BADGES ===== */
+.badge { display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; white-space: nowrap; }
+.b-late { background: var(--orange-pale); color: var(--orange); }
+.b-early { background: var(--blue-pale); color: var(--blue); }
+.b-absent { background: var(--red-pale); color: var(--red); }
+.b-ghost { background: var(--pink-pale); color: var(--pink); }
+.b-bunk { background: var(--purple-pale); color: var(--purple); }
+.b-prov-extra { background: var(--teal-pale); color: var(--teal); }
+.b-prov-sub { background: var(--indigo-pale); color: var(--indigo); }
+.b-other { background: var(--bg2); color: var(--ink-soft); }
+.b-flag { background: var(--red-pale); color: var(--red); border: 1px solid rgba(192,57,43,0.3); }
+.b-ok { background: var(--green-pale); color: var(--green); }
+
+/* ===== ALERT ===== */
+.alert { padding: 11px 16px; border-radius: var(--radius-sm); font-size: 0.85rem; margin-bottom: 14px; border: 1px solid; border-left: 3px solid; }
+.alert-success { background: var(--green-pale); color: var(--green); border-color: var(--green); }
+.alert-error { background: var(--red-pale); color: var(--red); border-color: var(--red); }
+.alert-info { background: var(--blue-pale); color: var(--blue); border-color: var(--blue); }
+
+/* ===== FILTERS ===== */
+.filter-bar { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 8px; margin-bottom: 14px; align-items: end; }
+.filter-bar .form-group { min-width: 0; overflow: hidden; }
+
+/* ===== EMPTY ===== */
+.empty { text-align: center; padding: 40px 20px; color: var(--ink-muted); }
+.empty-icon { font-size: 2.5rem; margin-bottom: 10px; }
+.empty-title { font-size: 1rem; font-weight: 600; margin-bottom: 6px; color: var(--ink); }
+.empty-text { font-size: 0.82rem; }
+
+/* ===== FLAGGED ===== */
+.flagged-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); gap: 10px; }
+.flagged-item:last-child { border-bottom: none; }
+
+/* ===== TEACHER PROFILE ===== */
+.profile-header { background: var(--hdr); color: #fff; border-radius: var(--radius-lg); padding: 18px 20px; margin-bottom: 14px; display: flex; align-items: center; gap: 16px; }
+.profile-avatar { width: 52px; height: 52px; border-radius: 50%; background: var(--hdr-acc); color: var(--hdr); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 700; flex-shrink: 0; font-family: var(--font-display); }
+.profile-name { font-family: var(--font-display); font-size: 1.2rem; color: var(--hdr-acc2); }
+.profile-meta { font-size: 0.78rem; color: rgba(255,255,255,0.5); margin-top: 3px; }
+
+/* ===== LEGEND ===== */
+.legend-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 14px; }
+.leg { display: flex; align-items: center; gap: 5px; font-size: 0.75rem; color: var(--ink-soft); }
+.leg-dot { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+/* ===== HEATMAP ===== */
+.teacher-heat-row { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); flex-wrap: nowrap; }
+.teacher-heat-row:last-child { border-bottom: none; }
+.heat-name { min-width: 130px; max-width: 130px; }
+.heat-days { display: flex; gap: 3px; flex-wrap: nowrap; }
+.day-dot { width: 20px; height: 20px; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; cursor: pointer; transition: transform .1s; flex-shrink: 0; }
+.day-dot:hover { transform: scale(1.25); }
+.dd-empty { background: var(--bg2); color: var(--ink-ghost); }
+.dd-late { background: #fde8c7; color: var(--orange); }
+.dd-early { background: #d6eaf8; color: var(--blue); }
+.dd-absent { background: #fadbd8; color: var(--red); }
+.dd-bunk { background: #e8daef; color: var(--purple); }
+.dd-prov-extra { background: #d5f5e3; color: var(--teal); }
+.dd-prov-sub { background: #d1e8f5; color: var(--indigo); }
+.dd-other { background: var(--bg2); color: var(--ink-soft); }
+
+/* ===== TEACHER LIST ===== */
+.teacher-list-item { background: var(--surface); border-radius: var(--radius-lg); border: 1px solid var(--border); box-shadow: var(--shadow); margin-bottom: 12px; overflow: hidden; }
+.teacher-list-header { display: flex; align-items: center; gap: 14px; padding: 14px 16px; cursor: pointer; user-select: none; }
+.teacher-list-header:hover { background: var(--bg); }
+.tl-avatar { width: 42px; height: 42px; border-radius: 50%; background: var(--hdr); color: var(--hdr-acc2); display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 700; flex-shrink: 0; font-family: var(--font-display); }
+.tl-info { flex: 1; min-width: 0; }
+.tl-name { font-weight: 600; font-size: 0.95rem; color: var(--ink); }
+.tl-meta { font-size: 0.75rem; color: var(--ink-muted); margin-top: 2px; }
+.tl-badges { display: flex; gap: 5px; flex-wrap: wrap; margin-top: 5px; }
+.tl-toggle { font-size: 1.1rem; color: var(--ink-ghost); transition: transform .2s; }
+.tl-toggle.open { transform: rotate(180deg); }
+.criteria-panel { border-top: 1px solid var(--border); padding: 12px 16px 16px; background: var(--bg); display: none; }
+.criteria-panel.open { display: block; }
+.criteria-label { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-muted); margin-bottom: 10px; }
+.criteria-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.criteria-btn { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; padding: 10px 12px; border-radius: var(--radius); border: 1.5px solid; cursor: pointer; transition: all .15s; font-family: var(--font); text-align: left; background: var(--surface); }
+.criteria-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+.criteria-btn .cb-icon { font-size: 1.2rem; }
+.criteria-btn .cb-label { font-size: 0.8rem; font-weight: 600; }
+.criteria-btn .cb-hint { font-size: 0.68rem; opacity: 0.7; }
+.cb-absent { border-color: rgba(192,57,43,0.3); color: var(--red); }
+.cb-absent:hover { background: var(--red-pale); }
+.cb-late { border-color: rgba(230,126,34,0.3); color: var(--orange); }
+.cb-late:hover { background: var(--orange-pale); }
+.cb-bunk { border-color: rgba(108,52,131,0.3); color: var(--purple); }
+.cb-bunk:hover { background: var(--purple-pale); }
+.cb-prov-extra { border-color: rgba(20,143,119,0.3); color: var(--teal); }
+.cb-prov-extra:hover { background: var(--teal-pale); }
+.cb-prov-sub { border-color: rgba(26,82,118,0.3); color: var(--indigo); }
+.cb-prov-sub:hover { background: var(--indigo-pale); }
+.cb-early { border-color: rgba(36,113,163,0.3); color: var(--blue); }
+.cb-early:hover { background: var(--blue-pale); }
+.cb-other { border-color: var(--border-strong); color: var(--ink-soft); }
+.cb-other:hover { background: var(--bg2); }
+
+/* ── Logged/marked state for criteria buttons ── */
+.criteria-btn.cb-logged {
+  opacity: 1 !important;
+  box-shadow: 0 0 0 1.5px currentColor;
+  position: relative;
+}
+.criteria-btn.cb-logged::after {
+  content: '✓ Logged';
+  position: absolute;
+  top: 6px; right: 8px;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: currentColor;
+  opacity: 0.85;
+}
+.cb-logged.cb-absent   { background: var(--red-pale)    !important; border-color: var(--red)    !important; }
+.cb-logged.cb-late     { background: var(--orange-pale)  !important; border-color: var(--orange) !important; }
+.cb-logged.cb-bunk     { background: var(--purple-pale)  !important; border-color: var(--purple) !important; }
+.cb-logged.cb-prov-extra { background: var(--teal-pale)  !important; border-color: var(--teal)   !important; }
+.cb-logged.cb-prov-sub { background: var(--indigo-pale)  !important; border-color: var(--indigo) !important; }
+.cb-logged.cb-early    { background: var(--blue-pale)    !important; border-color: var(--blue)   !important; }
+.cb-logged.cb-other    { background: var(--bg2)          !important; border-color: var(--ink-soft) !important; }
+
+/* ===== MODAL ===== */
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 500; display: flex; align-items: flex-end; justify-content: center; opacity: 0; pointer-events: none; transition: opacity .2s; }
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal-sheet { background: var(--surface); border-radius: var(--radius-lg) var(--radius-lg) 0 0; width: 100%; max-width: 560px; max-height: 90vh; overflow-y: auto; overflow-x: hidden; padding: 20px 22px 30px; transform: translateY(40px); transition: transform .25s; box-shadow: 0 -8px 40px rgba(0,0,0,0.18); }
+.modal-overlay.open .modal-sheet { transform: translateY(0); }
+.modal-handle { width: 40px; height: 4px; background: var(--border-strong); border-radius: 4px; margin: 0 auto 18px; }
+.modal-title { font-family: var(--font-display); font-size: 1.15rem; color: var(--ink); margin-bottom: 4px; }
+.modal-teacher { font-size: 0.82rem; color: var(--ink-muted); margin-bottom: 18px; }
+.modal-section { margin-top: 16px; overflow: hidden; }
+.modal-section-title { font-size: 0.72rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--ink-muted); margin-bottom: 8px; }
+.info-box { background: var(--bg); border: 1px solid var(--border-strong); border-radius: var(--radius-sm); padding: 10px 14px; font-size: 0.82rem; color: var(--ink-soft); margin-bottom: 14px; line-height: 1.5; }
+.info-box strong { color: var(--orange); }
+.modal-footer { display: flex; gap: 10px; margin-top: 22px; }
+.modal-footer .btn { flex: 1; justify-content: center; }
+.ghost-update-item { display: flex; align-items: center; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid var(--border); gap: 10px; }
+.ghost-update-item:last-child { border-bottom: none; }
+
+/* ===== INSTALL BANNER ===== */
+#install-banner { position: fixed; bottom: 0; left: 0; right: 0; background: var(--hdr); color: #fff; padding: 12px 20px; display: none; align-items: center; justify-content: space-between; gap: 12px; z-index: 999; box-shadow: 0 -4px 20px rgba(0,0,0,0.2); border-top: 1px solid rgba(255,255,255,0.1); }
+#install-banner.show { display: flex; }
+.install-text { font-size: 0.82rem; }
+.install-text strong { color: var(--hdr-acc2); }
+#offline-badge { display: none; position: fixed; top: 10px; right: 10px; background: var(--orange); color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 600; z-index: 200; }
+
+/* ===== SCROLLBAR ===== */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 4px; }
+
+/* ===== PRINT ===== */
+@media print {
+  body { background: white !important; color: black !important; font-size: 11pt; }
+  .app-header, .nav-tabs, .no-print { display: none !important; }
+  .main { padding: 0 !important; max-width: 100% !important; }
+  .page { display: block !important; }
+  .page:not(.print-target) { display: none !important; }
+  .card { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; margin-bottom: 12px; }
+  .stats-row { grid-template-columns: repeat(4, 1fr); }
+  .badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  table { font-size: 9pt; }
+  thead th { background: #f0f0f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .btn-row, .filter-bar, .criteria-panel, .tl-toggle, .modal-overlay { display: none !important; }
+  .tbl-wrap { overflow: visible !important; }
+  @page { margin: 1.5cm; size: A4; }
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 480px) {
+  .main { padding: 12px; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  .form-grid { grid-template-columns: 1fr; }
+  .form-group.span2, .form-group.full { grid-column: span 1; }
+  .heat-name { min-width: 90px; max-width: 90px; font-size: 0.78rem; }
+  .day-dot { width: 17px; height: 17px; font-size: 8px; }
+  .profile-header { flex-direction: column; text-align: center; }
+  table { font-size: 0.76rem; }
+  thead th, tbody td { padding: 8px; }
+  .criteria-grid { grid-template-columns: 1fr 1fr; }
+  .modal-sheet { padding: 18px 16px 28px; }
+  .date-bar { grid-template-columns: 1fr; gap: 8px; padding: 12px; }
+  .filter-bar { grid-template-columns: 1fr 1fr; }
+  .icon-btn { padding: 6px 8px; font-size: 0.72rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="offline-badge">Offline</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="incident-modal" onclick="handleModalOverlayClick(event)">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="modal-title">Log Incident</div>
+    <div class="modal-teacher" id="modal-teacher-name"></div>
+    <div id="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-gold" onclick="saveModalIncident()">✓ Save</button>
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="ghost-modal" onclick="closeGhostModal()">
+  <div class="modal-sheet" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">Update Ghost Attendance</div>
+    <div class="modal-teacher">Mark ghost attendance on absence records where it was not set at the time.</div>
+    <div id="ghost-modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeGhostModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="app-header">
+  <div class="header-top">
+    <div>
+      <div class="header-title">📋 TeacherTrack</div>
+      <div class="header-sub" id="school-name-display">School Accountability System</div>
+    </div>
+    <div class="header-actions">
+      <div class="theme-wrap">
+        <button class="theme-btn" onclick="toggleThemeMenu(event)" title="Change theme">🎨</button>
+        <div class="theme-dropdown" id="theme-dropdown">
+          <button class="theme-option" data-t="classic" onclick="setTheme('classic')"><span class="theme-swatch" style="background:#1a1a2e"></span>Classic</button>
+          <button class="theme-option" data-t="forest"  onclick="setTheme('forest')"><span class="theme-swatch" style="background:#1b3a2d"></span>Forest</button>
+          <button class="theme-option" data-t="slate"   onclick="setTheme('slate')"><span class="theme-swatch" style="background:#1e293b"></span>Slate</button>
+          <button class="theme-option" data-t="rose"    onclick="setTheme('rose')"><span class="theme-swatch" style="background:#4a1942"></span>Rose</button>
+          <button class="theme-option" data-t="peach"   onclick="setTheme('peach')"><span class="theme-swatch" style="background:#fff8f2;border-color:#c4a080"></span>Peach</button>
+          <button class="theme-option" data-t="sky"     onclick="setTheme('sky')"><span class="theme-swatch" style="background:#f3f8fd;border-color:#4a6e8a"></span>Sky</button>
+          <button class="theme-option" data-t="mint"    onclick="setTheme('mint')"><span class="theme-swatch" style="background:#f2fbf7;border-color:#3d7a60"></span>Mint</button>
+          <button class="theme-option" data-t="night"   onclick="setTheme('night')"><span class="theme-swatch" style="background:#111827;border-color:#fbbf24"></span>Night</button>
+        </div>
+      </div>
+      <button class="icon-btn" onclick="showExportMenu()">⬇ Export</button>
+      <button class="icon-btn gold" onclick="openGhostModal()">👻 Ghost</button>
+    </div>
+  </div>
+  <nav class="nav-tabs">
+    <button class="nav-tab active" data-tab="log"      onclick="switchTab('log')">📝 Today's Log</button>
+    <button class="nav-tab"        data-tab="dashboard" onclick="switchTab('dashboard')">📊 Dashboard</button>
+    <button class="nav-tab"        data-tab="records"   onclick="switchTab('records')">Records</button>
+    <button class="nav-tab"        data-tab="teachers"  onclick="switchTab('teachers')">Teacher Profile</button>
+    <button class="nav-tab"        data-tab="monthly"   onclick="switchTab('monthly')">Monthly View</button>
+    <button class="nav-tab"        data-tab="reports"   onclick="switchTab('reports')">Reports</button>
+    <button class="nav-tab"        data-tab="setup"     onclick="switchTab('setup')">Setup</button>
+  </nav>
+</div>
+
+<div class="main">
+
+<!-- ============================
+     TODAY'S LOG (Tab 1)
+============================= -->
+<div id="page-log" class="page active">
+  <div id="msg-log"></div>
+  <div class="date-bar">
+    <div class="form-group">
+      <label class="lbl">📅 Date</label>
+      <input type="date" id="dash-date" onchange="renderLog()">
+    </div>
+    <div class="form-group">
+      <label class="lbl">🏫 School End Time</label>
+      <input type="time" id="school-end-time" onchange="saveSchoolEndTime()">
+    </div>
+  </div>
+  <div id="msg-teacher-list" style="font-size:0.82rem;color:var(--ink-muted);margin-bottom:10px">
+    Tap a teacher to log an incident for the selected date.
+  </div>
+  <div id="teacher-list-container"></div>
+</div>
+
+<!-- ============================
+     DASHBOARD (Tab 2)
+============================= -->
+<div id="page-dashboard" class="page">
+  <div id="msg-dashboard"></div>
+  <div id="dash-stats" class="stats-row"></div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">🚩 Flagged this month (3+ incidents)</span>
+    </div>
+    <div class="card-body">
+      <div id="flagged-list"><div class="empty"><div class="empty-text">No teachers flagged this month.</div></div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">🕐 Recent incidents</span>
+      <button class="btn btn-sm btn-outline no-print" onclick="switchTab('records')">View all</button>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Date</th><th>Teacher</th><th>Incident</th><th>Detail</th></tr></thead>
+        <tbody id="dash-recent-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     RECORDS
+============================= -->
+<div id="page-records" class="page">
+  <div class="filter-bar no-print">
+    <div class="form-group">
+      <label class="lbl">Teacher</label>
+      <select id="f-teacher"><option value="">All teachers</option></select>
+    </div>
+    <div class="form-group">
+      <label class="lbl">Type</label>
+      <select id="f-type">
+        <option value="">All types</option>
+        <option value="absent">Absent (on leave)</option>
+        <option value="late">Late comer</option>
+        <option value="bunk">Class bunked</option>
+        <option value="prov_extra">Provisional (extra) class</option>
+        <option value="prov_sub">Provisional (substitution) class</option>
+        <option value="early">Early leave</option>
+        <option value="other">Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="lbl">From</label>
+      <input type="date" id="f-from">
+    </div>
+    <div class="form-group">
+      <label class="lbl">To</label>
+      <input type="date" id="f-to">
+    </div>
+    <div class="form-group" style="align-self:end">
+      <button class="btn btn-primary" onclick="renderRecords()">Filter</button>
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px">
+    <span id="rec-count" style="font-size:0.78rem;color:var(--ink-muted)"></span>
+    <button class="btn btn-sm btn-outline no-print" onclick="printPage('records')">🖨 Print</button>
+  </div>
+  <div class="card" style="padding:0">
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Date</th><th>Teacher</th><th>Type</th><th>Details</th><th>Time</th><th>Notes</th><th class="no-print"></th></tr></thead>
+        <tbody id="rec-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     TEACHER PROFILE
+============================= -->
+<div id="page-teachers" class="page">
+  <div class="filter-bar no-print">
+    <div class="form-group">
+      <label class="lbl">Select teacher</label>
+      <select id="tw-teacher" onchange="renderTeacherWise()"><option value="">— select —</option></select>
+    </div>
+    <div class="form-group">
+      <label class="lbl">Year</label>
+      <select id="tw-year" onchange="renderTeacherWise()"></select>
+    </div>
+    <div class="form-group" style="align-self:end">
+      <button class="btn btn-sm btn-outline no-print" onclick="printPage('teachers')">🖨 Print profile</button>
+    </div>
+  </div>
+  <div id="tw-content">
+    <div class="empty"><div class="empty-icon">👤</div><div class="empty-title">Select a teacher</div><div class="empty-text">Choose a teacher above to view their full accountability profile.</div></div>
+  </div>
+</div>
+
+<!-- ============================
+     MONTHLY VIEW
+============================= -->
+<div id="page-monthly" class="page">
+  <div class="filter-bar no-print">
+    <div class="form-group">
+      <label class="lbl">Month</label>
+      <select id="mv-month" onchange="renderMonthly()"></select>
+    </div>
+    <div class="form-group">
+      <label class="lbl">Year</label>
+      <select id="mv-year" onchange="renderMonthly()"></select>
+    </div>
+    <div class="form-group" style="align-self:end">
+      <button class="btn btn-sm btn-outline no-print" onclick="printPage('monthly')">🖨 Print heatmap</button>
+    </div>
+  </div>
+  <div class="legend-row">
+    <div class="leg"><div class="leg-dot" style="background:#fadbd8"></div>Absent</div>
+    <div class="leg"><div class="leg-dot" style="background:#fde8c7"></div>Late</div>
+    <div class="leg"><div class="leg-dot" style="background:#e8daef"></div>Class bunked</div>
+    <div class="leg"><div class="leg-dot" style="background:#d5f5e3"></div>Prov. extra</div>
+    <div class="leg"><div class="leg-dot" style="background:#d1e8f5"></div>Prov. sub</div>
+    <div class="leg"><div class="leg-dot" style="background:#d6eaf8"></div>Early leave</div>
+    <div class="leg"><div class="leg-dot" style="background:var(--bg2)"></div>Other</div>
+  </div>
+  <div class="card" style="padding:0">
+    <div class="card-body" style="overflow-x:auto">
+      <div id="mv-content"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================
+     REPORTS
+============================= -->
+<div id="page-reports" class="page">
+  <div class="filter-bar no-print">
+    <div class="form-group">
+      <label class="lbl">Report type</label>
+      <select id="rpt-type" onchange="renderReport()">
+        <option value="summary">Full summary (all teachers)</option>
+        <option value="latecomer">Late comers ranking</option>
+        <option value="bunker">Class bunkers ranking</option>
+        <option value="ghost">Ghost attendance list</option>
+        <option value="month">Month-wise breakdown</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label class="lbl">Period</label>
+      <select id="rpt-period" onchange="renderReport()">
+        <option value="all">All time</option>
+        <option value="thismonth">This month</option>
+        <option value="last3">Last 3 months</option>
+        <option value="thisyear">This year</option>
+      </select>
+    </div>
+    <div class="form-group" style="align-self:end">
+      <button class="btn btn-sm btn-outline no-print" onclick="printPage('reports')">🖨 Print report</button>
+    </div>
+  </div>
+  <div id="rpt-content"></div>
+</div>
+
+<!-- ============================
+     SETUP
+============================= -->
+<div id="page-setup" class="page">
+  <div id="msg-setup"></div>
+  <div class="card">
+    <div class="card-header"><span class="card-title">🏫 School settings</span></div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="form-group full">
+          <label class="lbl">School name</label>
+          <input type="text" id="s-school" placeholder="e.g. Rabindra Vidyamandir, Bangaon">
+        </div>
+        <div class="form-group">
+          <label class="lbl">Academic year</label>
+          <input type="text" id="s-year" placeholder="e.g. 2024-25">
+        </div>
+        <div class="form-group">
+          <label class="lbl">Principal / In-charge name</label>
+          <input type="text" id="s-principal" placeholder="Your name">
+        </div>
+      </div>
+      <div class="btn-row no-print">
+        <button class="btn btn-primary" onclick="saveSettings()">Save settings</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">👩‍🏫 Add teacher</span></div>
+    <div class="card-body">
+      <div class="form-grid">
+        <div class="form-group span2">
+          <label class="lbl">Full name *</label>
+          <input type="text" id="s-name" placeholder="e.g. Ramesh Kumar Sharma">
+        </div>
+        <div class="form-group">
+          <label class="lbl">Subject</label>
+          <input type="text" id="s-subject" placeholder="e.g. Mathematics">
+        </div>
+        <div class="form-group">
+          <label class="lbl">Classes assigned</label>
+          <input type="text" id="s-classes" placeholder="e.g. 9A, 10B, 11, 12">
+        </div>
+        <div class="form-group">
+          <label class="lbl">Employee ID (optional)</label>
+          <input type="text" id="s-empid" placeholder="e.g. TCH-042">
+        </div>
+        <div class="form-group">
+          <label class="lbl">Phone (optional)</label>
+          <input type="tel" id="s-phone" placeholder="e.g. 9800000000">
+        </div>
+      </div>
+      <div class="btn-row no-print">
+        <button class="btn btn-gold" onclick="addTeacher()">+ Add Teacher</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header">
+      <span class="card-title">Teacher list (<span id="t-count">0</span>)</span>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Name</th><th>Subject</th><th>Classes</th><th>EmpID</th><th>Records</th><th class="no-print"></th></tr></thead>
+        <tbody id="s-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><span class="card-title">💾 Data management</span></div>
+    <div class="card-body">
+      <div class="btn-row">
+        <button class="btn btn-outline" onclick="showExportMenu()">⬇ Export / Backup</button>
+        <label class="btn btn-outline" style="cursor:pointer">
+          ↑ Restore backup
+          <input type="file" accept=".json" style="display:none" onchange="restoreBackup(this)">
+        </label>
+        <button class="btn btn-danger" onclick="clearAllData()">🗑 Clear all data</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .main -->
+
+<div id="install-banner">
+  <div class="install-text">
+    <strong>Install TeacherTrack</strong><br>
+    <span style="font-size:0.72rem;opacity:0.7">Add to home screen for offline use</span>
+  </div>
+  <div style="display:flex;gap:8px">
+    <button class="btn btn-gold btn-sm" onclick="installApp()">Install</button>
+    <button class="btn btn-outline btn-sm" style="color:rgba(255,255,255,0.6);border-color:rgba(255,255,255,0.2)" onclick="dismissInstall()">Later</button>
+  </div>
+</div>
+
+<script>
+// ==========================================
+//  STATE
+// ==========================================
+const DB_KEY = 'teachertrack_v2';
+let state = loadState();
+let modalTid = null;
+let modalType = null;
+
+function loadState() {
+  try { const raw = localStorage.getItem(DB_KEY); if (raw) return JSON.parse(raw); } catch(e) {}
+  return { teachers: [], incidents: [], settings: { school: '', year: '', principal: '', schoolEndTime: '' }, theme: 'classic' };
+}
+function save() {
+  try { localStorage.setItem(DB_KEY, JSON.stringify(state)); } catch(e) {}
+}
+
+// ==========================================
+//  CONSTANTS
+// ==========================================
+const TYPE_LABELS = {
+  absent: 'Absent (on leave)', late: 'Late comer', bunk: 'Class bunked',
+  prov_extra: 'Provisional (extra) class', prov_sub: 'Provisional (substitution) class',
+  early: 'Early leave', other: 'Other'
+};
+const TYPE_BADGE = {
+  absent: 'b-absent', late: 'b-late', bunk: 'b-bunk',
+  prov_extra: 'b-prov-extra', prov_sub: 'b-prov-sub', early: 'b-early', other: 'b-other'
+};
+const TYPE_DOT = {
+  absent: 'dd-absent', late: 'dd-late', bunk: 'dd-bunk',
+  prov_extra: 'dd-prov-extra', prov_sub: 'dd-prov-sub', early: 'dd-early', other: 'dd-other'
+};
+const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+const CRITERIA = [
+  { type: 'absent',     icon: '❌', label: 'Absent today',  hint: '(on leave)',  cls: 'cb-absent' },
+  { type: 'late',       icon: '🕐', label: 'Late comer',    hint: '',            cls: 'cb-late' },
+  { type: 'bunk',       icon: '🚫', label: 'Class bunked',  hint: '',            cls: 'cb-bunk' },
+  { type: 'prov_extra', icon: '➕', label: 'Prov. class',   hint: '(extra)',     cls: 'cb-prov-extra' },
+  { type: 'prov_sub',   icon: '🔄', label: 'Prov. class',   hint: '(subst.)',    cls: 'cb-prov-sub' },
+  { type: 'early',      icon: '🚪', label: 'Early leave',   hint: '',            cls: 'cb-early' },
+  { type: 'other',      icon: '📌', label: 'Other',         hint: '',            cls: 'cb-other' },
+];
+
+function badge(type) { return `<span class="badge ${TYPE_BADGE[type]||'b-other'}">${TYPE_LABELS[type]||type}</span>`; }
+function fmtDate(d) { if (!d) return ''; const p = d.split('-'); return `${p[2]}/${p[1]}/${p[0]}`; }
+function today() { return new Date().toISOString().slice(0, 10); }
+function initials(name) { return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2); }
+function fmtTime(t) { if (!t) return ''; const [h, m] = t.split(':'); const hr = +h % 12 || 12; return `${hr}:${m} ${+h < 12 ? 'AM' : 'PM'}`; }
+
+// ==========================================
+//  THEMES
+// ==========================================
+function setTheme(t) {
+  document.documentElement.setAttribute('data-theme', t);
+  state.theme = t; save();
+  document.querySelectorAll('.theme-option').forEach(el => el.classList.toggle('active', el.dataset.t === t));
+  document.getElementById('theme-dropdown').classList.remove('open');
+}
+function toggleThemeMenu(e) {
+  e.stopPropagation();
+  document.getElementById('theme-dropdown').classList.toggle('open');
+}
+document.addEventListener('click', () => document.getElementById('theme-dropdown').classList.remove('open'));
+
+// ==========================================
+//  TABS
+// ==========================================
+let currentTab = 'log';
+function switchTab(t) {
+  document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
+  document.querySelector(`[data-tab="${t}"]`).classList.add('active');
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(`page-${t}`).classList.add('active');
+  currentTab = t;
+  const renderers = { log: renderLog, dashboard: renderDashboard, records: renderRecords, teachers: () => {}, monthly: renderMonthly, reports: renderReport, setup: renderSetup };
+  if (renderers[t]) renderers[t]();
+}
+
+// ==========================================
+//  POPULATE DROPDOWNS
+// ==========================================
+function populateDropdowns() {
+  const tOpts = state.teachers.map(t => `<option value="${t.id}">${t.name}</option>`).join('');
+  ['f-teacher', 'tw-teacher'].forEach(id => {
+    const el = document.getElementById(id); if (!el) return;
+    const prev = el.value;
+    const prefix = id === 'f-teacher' ? '<option value="">All teachers</option>' : '<option value="">— select —</option>';
+    el.innerHTML = prefix + tOpts;
+    if (prev) el.value = prev;
+  });
+  const cy = new Date().getFullYear();
+  const years = [...new Set([cy-1, cy, cy+1, ...state.incidents.map(i => +i.date.slice(0,4))])].sort().reverse();
+  const twY = document.getElementById('tw-year');
+  if (twY) { const prev = twY.value || String(cy); twY.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join(''); twY.value = prev; }
+  const cm = new Date().getMonth();
+  const mv = document.getElementById('mv-month');
+  if (mv) { const prev = mv.value || String(cm+1).padStart(2,'0'); mv.innerHTML = MONTHS.map((m,i) => `<option value="${String(i+1).padStart(2,'0')}">${m}</option>`).join(''); mv.value = prev; }
+  const mvy = document.getElementById('mv-year');
+  if (mvy) { const prev = mvy.value || String(cy); mvy.innerHTML = years.map(y => `<option value="${y}">${y}</option>`).join(''); mvy.value = prev; }
+}
+
+// ==========================================
+//  SCHOOL END TIME
+// ==========================================
+function saveSchoolEndTime() {
+  if (!state.settings) state.settings = {};
+  state.settings.schoolEndTime = document.getElementById('school-end-time').value;
+  save();
+}
+
+// ==========================================
+//  SETUP
+// ==========================================
+function saveSettings() {
+  if (!state.settings) state.settings = {};
+  state.settings.school = document.getElementById('s-school').value.trim();
+  state.settings.year = document.getElementById('s-year').value.trim();
+  state.settings.principal = document.getElementById('s-principal').value.trim();
+  save();
+  if (state.settings.school) document.getElementById('school-name-display').textContent = state.settings.school;
+  showMsg('msg-setup', 'Settings saved.', 'success');
+}
+
+function addTeacher() {
+  const name = document.getElementById('s-name').value.trim();
+  if (!name) { alert('Teacher name is required.'); return; }
+  if (state.teachers.find(t => t.name.toLowerCase() === name.toLowerCase())) { alert('A teacher with this name already exists.'); return; }
+  state.teachers.push({ id: Date.now(), name, subject: document.getElementById('s-subject').value.trim(), classes: document.getElementById('s-classes').value.trim(), empid: document.getElementById('s-empid').value.trim(), phone: document.getElementById('s-phone').value.trim() });
+  save(); populateDropdowns(); renderSetup(); renderLog();
+  ['s-name','s-subject','s-classes','s-empid','s-phone'].forEach(id => document.getElementById(id).value = '');
+  showMsg('msg-setup', 'Teacher added successfully.', 'success');
+}
+
+function removeTeacher(id) {
+  if (!confirm('Remove this teacher? Their incident records will be kept.')) return;
+  state.teachers = state.teachers.filter(t => t.id !== id);
+  save(); populateDropdowns(); renderSetup(); renderLog();
+}
+
+function renderSetup() {
+  if (state.settings) {
+    document.getElementById('s-school').value = state.settings.school || '';
+    document.getElementById('s-year').value = state.settings.year || '';
+    document.getElementById('s-principal').value = state.settings.principal || '';
+    if (state.settings.school) document.getElementById('school-name-display').textContent = state.settings.school;
+  }
+  document.getElementById('t-count').textContent = state.teachers.length;
+  const tb = document.getElementById('s-tbody');
+  if (!state.teachers.length) { tb.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:24px;color:var(--ink-muted)">No teachers added yet.</td></tr>`; return; }
+  tb.innerHTML = state.teachers.map(t => {
+    const cnt = state.incidents.filter(i => i.tid === t.id).length;
+    return `<tr><td><div class="t-name">${t.name}</div></td><td>${t.subject||'—'}</td><td>${t.classes||'—'}</td><td>${t.empid||'—'}</td><td><span class="badge ${cnt>0?'b-absent':'b-ok'}">${cnt}</span></td><td class="no-print"><button class="btn btn-sm btn-danger" onclick="removeTeacher(${t.id})">Remove</button></td></tr>`;
+  }).join('');
+}
+
+// ==========================================
+//  TODAY'S LOG — teacher list only
+// ==========================================
+function renderLog() {
+  const selDate = document.getElementById('dash-date').value || today();
+  document.getElementById('dash-date').value = selDate;
+  const endTime = (state.settings && state.settings.schoolEndTime) || '';
+  const etEl = document.getElementById('school-end-time');
+  if (etEl && !etEl.value && endTime) etEl.value = endTime;
+
+  const container = document.getElementById('teacher-list-container');
+  if (!state.teachers.length) {
+    container.innerHTML = `<div class="empty"><div class="empty-icon">👩‍🏫</div><div class="empty-title">No teachers added</div><div class="empty-text">Go to Setup tab to add teachers first.</div></div>`;
+    return;
+  }
+  container.innerHTML = state.teachers.map(t => {
+    const todayIncs = state.incidents.filter(i => i.tid === t.id && i.date === selDate);
+    const badges = todayIncs.map(i => `<span class="badge ${TYPE_BADGE[i.type]}">${TYPE_LABELS[i.type]}</span>`).join('');
+    const criteriaButtons = CRITERIA.map(c => {
+      const isLogged = todayIncs.some(i => i.type === c.type);
+      return `<button class="criteria-btn ${c.cls}${isLogged ? ' cb-logged' : ''}" onclick="openModal(${t.id}, '${c.type}', event)">
+        <span class="cb-icon">${c.icon}</span>
+        <span class="cb-label">${c.label}</span>
+        ${c.hint ? `<span class="cb-hint">${c.hint}</span>` : ''}
+      </button>`;
+    }).join('');
+    return `<div class="teacher-list-item" id="tli-${t.id}">
+      <div class="teacher-list-header" onclick="toggleTeacherPanel(${t.id})">
+        <div class="tl-avatar">${initials(t.name)}</div>
+        <div class="tl-info">
+          <div class="tl-name">${t.name}</div>
+          <div class="tl-meta">${[t.subject, t.classes ? 'Classes: '+t.classes : ''].filter(Boolean).join(' · ')}</div>
+          ${todayIncs.length ? `<div class="tl-badges">${badges}</div>` : ''}
+        </div>
+        <div class="tl-toggle" id="tlt-${t.id}">▾</div>
+      </div>
+      <div class="criteria-panel" id="cp-${t.id}">
+        <div class="criteria-label">Log an incident for ${fmtDate(selDate)}</div>
+        <div class="criteria-grid">${criteriaButtons}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function toggleTeacherPanel(tid) {
+  const panel = document.getElementById(`cp-${tid}`);
+  const toggle = document.getElementById(`tlt-${tid}`);
+  const isOpen = panel.classList.contains('open');
+  document.querySelectorAll('.criteria-panel.open').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.tl-toggle.open').forEach(t => t.classList.remove('open'));
+  if (!isOpen) { panel.classList.add('open'); toggle.classList.add('open'); }
+}
+
+// ==========================================
+//  DASHBOARD — stats + flagged + recent
+// ==========================================
+function renderDashboard() {
+  const ym = new Date().toISOString().slice(0, 7);
+  const all = state.incidents;
+  const month = all.filter(i => i.date.startsWith(ym));
+
+  // Stats
+  const stats = [
+    { num: state.teachers.length, label: 'Teachers', cls: 'accent' },
+    { num: all.length, label: 'Total records', cls: '' },
+    { num: month.filter(i => i.type === 'absent').length, label: 'Absent (month)', cls: month.filter(i=>i.type==='absent').length > 0 ? 'warn' : '' },
+    { num: month.filter(i => i.type === 'late').length, label: 'Late (month)', cls: '' },
+    { num: month.filter(i => i.type === 'bunk').length, label: 'Bunked (month)', cls: month.filter(i=>i.type==='bunk').length > 0 ? 'warn' : '' },
+    { num: month.filter(i => i.type === 'prov_extra' || i.type === 'prov_sub').length, label: 'Provisional (month)', cls: 'good' },
+  ];
+  document.getElementById('dash-stats').innerHTML = stats.map(s => `<div class="stat-card ${s.cls}"><div class="stat-num">${s.num}</div><div class="stat-label">${s.label}</div></div>`).join('');
+
+  // Flagged this month
+  const counts = {};
+  month.forEach(i => { counts[i.tid] = (counts[i.tid] || 0) + 1; });
+  const flagged = Object.entries(counts).filter(([,c]) => c >= 3).sort((a,b) => b[1]-a[1]);
+  const fl = document.getElementById('flagged-list');
+  fl.innerHTML = flagged.length
+    ? flagged.map(([tid, c]) => {
+        const t = state.teachers.find(x => x.id === parseInt(tid));
+        const types = month.filter(i => i.tid === parseInt(tid)).map(i => TYPE_LABELS[i.type]).join(', ');
+        return `<div class="flagged-item"><div><div class="t-name">${t?t.name:'Unknown'}</div><div class="t-sub">${types}</div></div><span class="badge b-flag">${c} incidents</span></div>`;
+      }).join('')
+    : '<div class="empty"><div class="empty-text">No teacher has 3 or more incidents this month. ✓</div></div>';
+
+  // Recent incidents
+  const recent = [...all].sort((a,b) => b.date.localeCompare(a.date)).slice(0, 15);
+  const tb = document.getElementById('dash-recent-tbody');
+  tb.innerHTML = recent.length
+    ? recent.map(i => {
+        const t = state.teachers.find(x => x.id === i.tid);
+        let det = '';
+        if (i.type === 'bunk') det = i.proxy === 'yes' ? 'Proxy: '+(i.proxyName||'yes') : 'No proxy';
+        else if (i.cls) det = i.cls;
+        return `<tr><td style="white-space:nowrap">${fmtDate(i.date)}</td><td class="t-name">${t?t.name:'Unknown'}</td><td>${badge(i.type)}</td><td class="t-note">${det||i.notes||'—'}</td></tr>`;
+      }).join('')
+    : `<tr><td colspan="4" style="text-align:center;padding:24px;color:var(--ink-muted)">No incidents logged yet.</td></tr>`;
+}
+
+// ==========================================
+//  MODAL
+// ==========================================
+function openModal(tid, type, e) {
+  e && e.stopPropagation();
+  modalTid = tid; modalType = type;
+  const t = state.teachers.find(x => x.id === tid);
+  const selDate = document.getElementById('dash-date').value || today();
+  const isToday = selDate === today();
+
+  document.getElementById('modal-title').textContent = `${CRITERIA.find(c=>c.type===type)?.icon || '📌'} ${TYPE_LABELS[type]}`;
+  document.getElementById('modal-teacher-name').textContent = `Teacher: ${t?.name || ''}  ·  Date: ${fmtDate(selDate)}`;
+
+  let html = '';
+  if (type === 'absent') {
+    html = `<div class="info-box"><strong>Note:</strong> Ghost attendance cannot be marked on the day of absence. Use the 👻 Ghost button later to update.</div>
+      <div class="modal-section"><div class="modal-section-title">Ghost Attendance</div>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="ghost" value="no" checked><span class="radio-face">No</span></label>
+          <label class="radio-opt"><input type="radio" name="ghost" value="yes" ${!isToday?'':'disabled'}><span class="radio-face">Yes ${isToday?'<span style="font-size:0.72rem;color:var(--ink-muted)">(cannot mark today)</span>':''}</span></label>
+          <label class="radio-opt"><input type="radio" name="ghost" value="later"><span class="radio-face">Update later</span></label>
+        </div></div>
+      <div class="modal-section"><div class="modal-section-title">Notes (optional)</div>
+        <textarea id="m-notes" placeholder="Reason for leave, any remarks..."></textarea></div>`;
+  } else if (type === 'late') {
+    html = `<div class="modal-section"><div class="modal-section-title">Arrival Time *</div><input type="time" id="m-arrival"></div>
+      <div class="modal-section"><div class="modal-section-title">Notes (optional)</div><textarea id="m-notes" placeholder="Any details..."></textarea></div>`;
+  } else if (type === 'bunk') {
+    html = `<div class="modal-section"><div class="modal-section-title">Class / Period</div><input type="text" id="m-cls" placeholder="e.g. Class 10A – Period 3 – Maths"></div>
+      <div class="modal-section"><div class="modal-section-title">Did the teacher send someone as proxy?</div>
+        <div class="radio-group">
+          <label class="radio-opt"><input type="radio" name="proxy" value="no" checked><span class="radio-face">No</span></label>
+          <label class="radio-opt"><input type="radio" name="proxy" value="yes"><span class="radio-face">Yes</span></label>
+        </div></div>
+      <div class="modal-section"><div class="modal-section-title">Proxy person details (if yes)</div><input type="text" id="m-proxy-name" placeholder="Name / class of person who covered"></div>
+      <div class="modal-section"><div class="modal-section-title">Additional notes</div><textarea id="m-notes" placeholder="What happened, evidence, etc."></textarea></div>`;
+  } else if (type === 'prov_extra') {
+    html = `<div class="modal-section"><div class="modal-section-title">Class / Period taken (extra)</div><input type="text" id="m-cls" placeholder="e.g. Class 9B – Period 5 – Science"></div>
+      <div class="modal-section"><div class="modal-section-title">Details</div><textarea id="m-notes" placeholder="Details of the extra class taken besides own schedule..."></textarea></div>`;
+  } else if (type === 'prov_sub') {
+    html = `<div class="modal-section"><div class="modal-section-title">Class / Period (substituted for)</div><input type="text" id="m-cls" placeholder="e.g. Class 8A – Period 2 – In place of Smt. Roy"></div>
+      <div class="modal-section"><div class="modal-section-title">Details</div><textarea id="m-notes" placeholder="Whose class was substituted, subject, any details..."></textarea></div>`;
+  } else if (type === 'early') {
+    const schoolEnd = (state.settings && state.settings.schoolEndTime) || '';
+    html = `${schoolEnd ? `<div class="info-box">School end time: <strong>${fmtTime(schoolEnd)}</strong></div>` : `<div class="info-box">Set school end time on the date bar to track early leave accurately.</div>`}
+      <div class="modal-section"><div class="modal-section-title">Departure Time *</div><input type="time" id="m-depart" value="${schoolEnd}"></div>
+      <div class="modal-section"><div class="modal-section-title">Notes (optional)</div><textarea id="m-notes" placeholder="Reason for early leave..."></textarea></div>`;
+  } else {
+    html = `<div class="modal-section"><div class="modal-section-title">Details</div><textarea id="m-notes" placeholder="Describe the incident..."></textarea></div>`;
+  }
+
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('ghost-modal').classList.remove('open');
+  document.getElementById('incident-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('incident-modal').classList.remove('open');
+  document.body.style.overflow = '';
+  modalTid = null; modalType = null;
+}
+function handleModalOverlayClick(e) { if (e.target === document.getElementById('incident-modal')) closeModal(); }
+
+function saveModalIncident() {
+  if (!modalTid || !modalType) return;
+  const selDate = document.getElementById('dash-date').value || today();
+  const inc = {
+    id: Date.now(), tid: modalTid, date: selDate, type: modalType,
+    cls: (document.getElementById('m-cls') || {}).value?.trim() || '',
+    arrival: (document.getElementById('m-arrival') || {}).value || '',
+    depart: (document.getElementById('m-depart') || {}).value || '',
+    notes: (document.getElementById('m-notes') || {}).value?.trim() || '',
+    logged: new Date().toISOString()
+  };
+  if (modalType === 'absent') { const ghostEl = document.querySelector('input[name="ghost"]:checked'); inc.ghost = ghostEl ? ghostEl.value : 'later'; }
+  if (modalType === 'bunk') { const proxyEl = document.querySelector('input[name="proxy"]:checked'); inc.proxy = proxyEl ? proxyEl.value : 'no'; const pnEl = document.getElementById('m-proxy-name'); inc.proxyName = pnEl ? pnEl.value.trim() : ''; }
+  state.incidents.push(inc);
+  save(); populateDropdowns(); closeModal();
+  renderLog();
+  showMsg('msg-log', `✓ Incident logged for ${state.teachers.find(t=>t.id===inc.tid)?.name}.`, 'success');
+}
+
+// ==========================================
+//  GHOST MODAL
+// ==========================================
+function openGhostModal() {
+  const absentRecs = state.incidents.filter(i => i.type === 'absent' && (i.ghost === 'later' || i.ghost === undefined || i.ghost === null));
+  const el = document.getElementById('ghost-modal-body');
+  el.innerHTML = absentRecs.length
+    ? absentRecs.sort((a,b) => b.date.localeCompare(a.date)).map(i => {
+        const t = state.teachers.find(x => x.id === i.tid);
+        return `<div class="ghost-update-item"><div><div class="t-name">${t?t.name:'Unknown'}</div><div class="t-sub">${fmtDate(i.date)} · ${i.notes||'No notes'}</div></div>
+          <div style="display:flex;gap:6px;flex-shrink:0">
+            <button class="btn btn-sm" style="background:var(--pink-pale);color:var(--pink);border-color:rgba(169,50,38,0.3)" onclick="setGhost(${i.id},'yes')">👻 Ghost</button>
+            <button class="btn btn-sm btn-outline" onclick="setGhost(${i.id},'no')">✓ Not ghost</button>
+          </div></div>`;
+      }).join('')
+    : `<div class="empty"><div class="empty-text">No pending ghost attendance records.</div></div>`;
+  document.getElementById('incident-modal').classList.remove('open');
+  document.getElementById('ghost-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function setGhost(incId, val) {
+  const inc = state.incidents.find(i => i.id === incId);
+  if (inc) { inc.ghost = val; save(); }
+  openGhostModal();
+}
+function closeGhostModal() { document.getElementById('ghost-modal').classList.remove('open'); document.body.style.overflow = ''; }
+
+// ==========================================
+//  RECORDS
+// ==========================================
+function renderRecords() {
+  let data = [...state.incidents];
+  const ft = document.getElementById('f-teacher').value;
+  const fty = document.getElementById('f-type').value;
+  const ff = document.getElementById('f-from').value;
+  const fto = document.getElementById('f-to').value;
+  if (ft) data = data.filter(i => i.tid === parseInt(ft));
+  if (fty) data = data.filter(i => i.type === fty);
+  if (ff) data = data.filter(i => i.date >= ff);
+  if (fto) data = data.filter(i => i.date <= fto);
+  data.sort((a,b) => b.date.localeCompare(a.date));
+  document.getElementById('rec-count').textContent = `${data.length} record${data.length !== 1 ? 's' : ''}`;
+  const tb = document.getElementById('rec-tbody');
+  if (!data.length) { tb.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:var(--ink-muted)">No records match the selected filters.</td></tr>`; return; }
+  tb.innerHTML = data.map(i => {
+    const t = state.teachers.find(x => x.id === i.tid);
+    let detail = '';
+    if (i.type === 'absent' && i.ghost) detail = i.ghost === 'yes' ? '👻 Ghost' : i.ghost === 'later' ? 'Ghost: pending' : '';
+    if (i.type === 'bunk') detail = (i.proxy === 'yes' ? 'Proxy: '+(i.proxyName||'yes') : 'No proxy') + (i.cls ? ' · '+i.cls : '');
+    else if (i.cls) detail = i.cls;
+    const time = [i.arrival ? '↑'+fmtTime(i.arrival) : '', i.depart ? '↓'+fmtTime(i.depart) : ''].filter(Boolean).join(' ');
+    return `<tr><td style="white-space:nowrap">${fmtDate(i.date)}</td><td class="t-name">${t?t.name:'Unknown'}<br><span class="t-sub">${t?.subject||''}</span></td><td>${badge(i.type)}</td><td style="font-size:0.78rem">${detail||'—'}</td><td style="font-size:0.78rem;white-space:nowrap">${time||'—'}</td><td class="t-note">${i.notes||'—'}</td><td class="no-print"><button class="btn btn-sm btn-danger" onclick="deleteIncident(${i.id})">Del</button></td></tr>`;
+  }).join('');
+}
+
+function deleteIncident(id) {
+  if (!confirm('Delete this incident record?')) return;
+  state.incidents = state.incidents.filter(i => i.id !== id);
+  save();
+  if (currentTab === 'records') renderRecords();
+  if (currentTab === 'log') renderLog();
+  if (currentTab === 'dashboard') renderDashboard();
+}
+
+// ==========================================
+//  TEACHER PROFILE
+// ==========================================
+function renderTeacherWise() {
+  const tid = parseInt(document.getElementById('tw-teacher').value);
+  const yr = document.getElementById('tw-year').value;
+  const el = document.getElementById('tw-content');
+  if (!tid) { el.innerHTML = `<div class="empty"><div class="empty-icon">👤</div><div class="empty-title">Select a teacher</div></div>`; return; }
+  const t = state.teachers.find(x => x.id === tid); if (!t) return;
+  let data = state.incidents.filter(i => i.tid === tid);
+  if (yr) data = data.filter(i => i.date.startsWith(yr));
+  data.sort((a,b) => b.date.localeCompare(a.date));
+  const by = {}; Object.keys(TYPE_LABELS).forEach(k => by[k] = 0);
+  data.forEach(i => by[i.type] = (by[i.type] || 0) + 1);
+  const total = data.length;
+  const monthly = {};
+  data.forEach(i => { const m = i.date.slice(0,7); monthly[m] = (monthly[m]||0)+1; });
+  el.innerHTML = `
+    <div class="profile-header">
+      <div class="profile-avatar">${initials(t.name)}</div>
+      <div><div class="profile-name">${t.name}</div>
+        <div class="profile-meta">${t.subject?t.subject+' · ':''}${t.classes?'Classes: '+t.classes:''}${t.empid?' · ID: '+t.empid:''}</div>
+        <div style="margin-top:8px"><span class="badge ${total>5?'b-flag':'b-ok'}">${total} incident${total!==1?'s':''} in ${yr}</span></div>
+      </div></div>
+    <div class="stats-row">${Object.entries(TYPE_LABELS).map(([k,v]) => `<div class="stat-card ${by[k]>0?'warn':''}"><div class="stat-num">${by[k]}</div><div class="stat-label">${v}</div></div>`).join('')}</div>
+    <div class="card"><div class="card-header"><span class="card-title">Month-wise breakdown — ${yr}</span></div>
+      <div class="card-body">${Object.keys(monthly).length ? `<table><thead><tr><th>Month</th><th>Incidents</th></tr></thead><tbody>${Object.entries(monthly).sort().reverse().map(([m,c]) => `<tr><td>${m}</td><td><span class="badge b-absent">${c}</span></td></tr>`).join('')}</tbody></table>` : '<div class="empty"><div class="empty-text">No incidents in this year.</div></div>'}</div></div>
+    <div class="card" style="padding:0"><div class="card-header"><span class="card-title">All incident records — ${yr}</span></div>
+      <div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Type</th><th>Details</th><th>Time</th><th>Notes</th></tr></thead>
+        <tbody>${data.length ? data.map(i => {
+          let det = '';
+          if (i.type === 'absent' && i.ghost) det = i.ghost==='yes'?'👻 Ghost':i.ghost==='later'?'Ghost: pending':'';
+          if (i.type === 'bunk') det = (i.proxy==='yes'?'Proxy: '+(i.proxyName||'yes'):'No proxy')+(i.cls?' · '+i.cls:'');
+          else if (i.cls) det = i.cls;
+          const time = [i.arrival?'↑'+fmtTime(i.arrival):'', i.depart?'↓'+fmtTime(i.depart):''].filter(Boolean).join(' ');
+          return `<tr><td style="white-space:nowrap">${fmtDate(i.date)}</td><td>${badge(i.type)}</td><td style="font-size:0.78rem">${det||'—'}</td><td style="font-size:0.78rem;white-space:nowrap">${time||'—'}</td><td class="t-note">${i.notes||'—'}</td></tr>`;
+        }).join('') : `<tr><td colspan="5" style="text-align:center;padding:20px;color:var(--ink-muted)">No incidents on record.</td></tr>`}</tbody>
+      </table></div></div>`;
+}
+
+// ==========================================
+//  MONTHLY HEATMAP
+// ==========================================
+function renderMonthly() {
+  const month = document.getElementById('mv-month').value;
+  const year = document.getElementById('mv-year').value;
+  const ym = `${year}-${month}`;
+  const daysInMonth = new Date(parseInt(year), parseInt(month), 0).getDate();
+  const el = document.getElementById('mv-content');
+  if (!state.teachers.length) { el.innerHTML = '<div class="empty"><div class="empty-text">No teachers added yet. Go to Setup.</div></div>'; return; }
+  let header = `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+    <div style="min-width:130px;font-size:0.72rem;font-weight:600;color:var(--ink-muted);text-transform:uppercase">Teacher</div>
+    <div style="display:flex;gap:3px">${Array.from({length:daysInMonth},(_,i)=>`<div style="width:20px;height:20px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:600;color:var(--ink-muted)">${i+1}</div>`).join('')}</div>
+    <div style="min-width:30px;font-size:0.72rem;font-weight:600;color:var(--ink-muted);text-transform:uppercase">Total</div></div>`;
+  const rows = state.teachers.map(t => {
+    const days = Array.from({length: daysInMonth}, (_, i) => {
+      const d = `${ym}-${String(i+1).padStart(2,'0')}`;
+      const incs = state.incidents.filter(x => x.tid === t.id && x.date === d);
+      if (!incs.length) return `<div class="day-dot dd-empty" title="Day ${i+1}: No incidents">${i+1}</div>`;
+      const top = incs[0].type;
+      const tip = `${t.name} - ${i+1}: ${incs.map(x=>TYPE_LABELS[x.type]).join(', ')}`;
+      return `<div class="day-dot ${TYPE_DOT[top]||'dd-other'}" title="${tip}" onclick="alert('${tip.replace(/'/g,"&#39;")}')">${i+1}</div>`;
+    }).join('');
+    const cnt = state.incidents.filter(i => i.tid === t.id && i.date.startsWith(ym)).length;
+    return `<div class="teacher-heat-row">
+      <div class="heat-name"><div class="t-name" style="font-size:0.82rem">${t.name}</div><div class="t-sub">${t.subject||''}</div></div>
+      <div class="heat-days">${days}</div>
+      <div style="min-width:30px;text-align:right">${cnt?`<span class="badge b-absent">${cnt}</span>`:''}</div></div>`;
+  }).join('');
+  el.innerHTML = header + rows;
+}
+
+// ==========================================
+//  REPORTS
+// ==========================================
+function getFilteredIncidents(period) {
+  const now = new Date(); const cy = now.toISOString().slice(0,4); const ym = now.toISOString().slice(0,7);
+  let data = [...state.incidents];
+  if (period === 'thismonth') data = data.filter(i => i.date.startsWith(ym));
+  else if (period === 'last3') { const d3 = new Date(now); d3.setMonth(d3.getMonth()-3); data = data.filter(i => i.date >= d3.toISOString().slice(0,10)); }
+  else if (period === 'thisyear') data = data.filter(i => i.date.startsWith(cy));
+  return data;
+}
+
+function renderReport() {
+  const type = document.getElementById('rpt-type').value;
+  const period = document.getElementById('rpt-period').value;
+  const data = getFilteredIncidents(period);
+  const el = document.getElementById('rpt-content');
+  const periodLabel = {all:'All time',thismonth:'This month',last3:'Last 3 months',thisyear:'This year'}[period];
+
+  if (type === 'summary') {
+    const rows = state.teachers.map(t => { const tdata=data.filter(i=>i.tid===t.id); const by={}; Object.keys(TYPE_LABELS).forEach(k=>by[k]=0); tdata.forEach(i=>by[i.type]++); return {t,total:tdata.length,by}; }).sort((a,b)=>b.total-a.total);
+    el.innerHTML = `<div class="card" style="padding:0"><div class="card-header"><span class="card-title">Full summary — ${periodLabel}</span></div><div class="tbl-wrap"><table><thead><tr><th>Teacher</th><th>Total</th>${Object.values(TYPE_LABELS).map(v=>`<th style="font-size:0.65rem">${v}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr><td class="t-name">${r.t.name}<br><span class="t-sub">${r.t.subject||''}</span></td><td><span class="badge ${r.total>0?'b-absent':'b-ok'}">${r.total}</span></td>${Object.keys(TYPE_LABELS).map(k=>`<td>${r.by[k]>0?'<span class="badge '+TYPE_BADGE[k]+'">'+r.by[k]+'</span>':'-'}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
+  } else if (type === 'latecomer') {
+    const lates=data.filter(i=>i.type==='late'); const cnt={}; lates.forEach(i=>cnt[i.tid]=(cnt[i.tid]||0)+1);
+    const rows=Object.entries(cnt).sort((a,b)=>b[1]-a[1]);
+    el.innerHTML = `<div class="card" style="padding:0"><div class="card-header"><span class="card-title">Late comers ranking — ${periodLabel}</span></div><div class="tbl-wrap"><table><thead><tr><th>Rank</th><th>Teacher</th><th>Subject</th><th>Late arrivals</th></tr></thead><tbody>${rows.map(([tid,c],idx)=>{const t=state.teachers.find(x=>x.id===parseInt(tid));return `<tr><td style="font-weight:600;color:var(--ink-muted)">#${idx+1}</td><td class="t-name">${t?t.name:'Unknown'}</td><td>${t?t.subject:'—'}</td><td><span class="badge b-late">${c} times</span></td></tr>`;}).join('')}</tbody></table></div></div>`;
+  } else if (type === 'bunker') {
+    const bunks=data.filter(i=>i.type==='bunk'); const cnt={}; bunks.forEach(i=>cnt[i.tid]=(cnt[i.tid]||0)+1);
+    const rows=Object.entries(cnt).sort((a,b)=>b[1]-a[1]);
+    el.innerHTML = `<div class="card" style="padding:0"><div class="card-header"><span class="card-title">Class bunkers ranking — ${periodLabel}</span></div><div class="tbl-wrap"><table><thead><tr><th>Rank</th><th>Teacher</th><th>Subject</th><th>Bunked</th><th>Proxy?</th></tr></thead><tbody>${rows.map(([tid,c],idx)=>{const t=state.teachers.find(x=>x.id===parseInt(tid));const proxied=bunks.filter(i=>i.tid===parseInt(tid)&&i.proxy==='yes').length;return `<tr><td style="font-weight:600;color:var(--ink-muted)">#${idx+1}</td><td class="t-name">${t?t.name:'Unknown'}</td><td>${t?t.subject:'—'}</td><td><span class="badge b-bunk">${c} times</span></td><td style="font-size:0.78rem">${proxied} sent proxy</td></tr>`;}).join('')}</tbody></table></div></div>`;
+  } else if (type === 'ghost') {
+    const ghosts=data.filter(i=>i.type==='absent'&&i.ghost==='yes');
+    el.innerHTML = `<div class="card" style="padding:0"><div class="card-header"><span class="card-title">Ghost attendance — ${periodLabel} (${ghosts.length} total)</span></div><div class="tbl-wrap"><table><thead><tr><th>Date</th><th>Teacher</th><th>Notes</th></tr></thead><tbody>${ghosts.length?ghosts.sort((a,b)=>b.date.localeCompare(a.date)).map(i=>{const t=state.teachers.find(x=>x.id===i.tid);return `<tr><td style="white-space:nowrap">${fmtDate(i.date)}</td><td class="t-name">${t?t.name:'Unknown'}</td><td style="font-size:0.78rem">${i.notes||'—'}</td></tr>`;}).join(''):`<tr><td colspan="3" style="text-align:center;padding:24px;color:var(--ink-muted)">No ghost attendance on record.</td></tr>`}</tbody></table></div></div>`;
+  } else if (type === 'month') {
+    const monthly={}; data.forEach(i=>{const m=i.date.slice(0,7);if(!monthly[m])monthly[m]={};monthly[m][i.type]=(monthly[m][i.type]||0)+1;});
+    el.innerHTML = `<div class="card" style="padding:0"><div class="card-header"><span class="card-title">Month-wise breakdown — ${periodLabel}</span></div><div class="tbl-wrap"><table><thead><tr><th>Month</th><th>Total</th>${Object.values(TYPE_LABELS).map(v=>`<th style="font-size:0.65rem">${v}</th>`).join('')}</tr></thead><tbody>${Object.entries(monthly).sort().reverse().map(([m,by])=>`<tr><td style="font-weight:500">${m}</td><td>${Object.values(by).reduce((a,b)=>a+b,0)}</td>${Object.keys(TYPE_LABELS).map(k=>`<td>${by[k]||'-'}</td>`).join('')}</tr>`).join('')}</tbody></table></div></div>`;
+  }
+}
+
+// ==========================================
+//  EXPORT / PRINT
+// ==========================================
+function printPage(tab) {
+  // Ensure the tab is rendered first
+  switchTab(tab);
+
+  // Give the renderer one frame to write innerHTML, then capture the fully-painted DOM
+  requestAnimationFrame(() => {
+    const targetEl = document.getElementById(`page-${tab}`);
+    const school   = state.settings?.school || 'TeacherTrack';
+    const principal = state.settings?.principal || '';
+    const dateStr  = new Date().toLocaleDateString('en-IN', {day:'2-digit', month:'long', year:'numeric'});
+
+    // Collect all <style> blocks from the current document so the new window
+    // inherits every CSS rule exactly — no missing fonts, badges, colours, etc.
+    const allStyles = Array.from(document.querySelectorAll('style'))
+      .map(s => s.outerHTML).join('\n');
+
+    // Capture the rendered HTML of just the target page section
+    const contentHTML = targetEl.innerHTML;
+
+    // Build a complete, self-contained HTML document for the print window.
+    // This is already fully-painted when onload fires — no async rendering race.
+    const printDoc = `<!DOCTYPE html>
+<html lang="en" data-theme="classic">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${school} — Print</title>
+  ${allStyles}
+  <style>
+    /* Force print-friendly layout in the new window */
+    body { background: white !important; color: black !important; font-size: 11pt; margin: 0; padding: 0; font-family: 'DM Sans', system-ui, sans-serif; }
+    .no-print, .btn-row, .filter-bar, .criteria-panel, .tl-toggle, .modal-overlay, button { display: none !important; }
+    .card { box-shadow: none !important; border: 1px solid #ccc !important; break-inside: avoid; margin-bottom: 12px; }
+    .stats-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 8px; }
+    .badge { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    table { font-size: 9pt; width: 100%; border-collapse: collapse; }
+    thead th { background: #f0f0f0 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; padding: 6px 8px; }
+    td { padding: 5px 8px; border-bottom: 1px solid #e0e0e0; }
+    .tbl-wrap { overflow: visible !important; }
+    .print-header { font-family: Georgia, serif; padding: 0 0 16px 0; border-bottom: 2px solid #1a1a2e; margin-bottom: 20px; }
+    .print-header h1 { color: #1a1a2e; font-size: 16pt; margin: 0 0 4px 0; }
+    .print-header p  { color: #666; font-size: 9pt; margin: 0; }
+    @page { margin: 1.5cm; size: A4; }
+  </style>
+</head>
+<body>
+  <div class="print-header">
+    <h1>${school}</h1>
+    <p>Teacher Accountability Report &nbsp;|&nbsp; ${dateStr}${principal ? ' &nbsp;|&nbsp; ' + principal : ''}</p>
+  </div>
+  <div class="page">${contentHTML}</div>
+  <script>
+    // Auto-print as soon as the window has fully loaded and painted
+    window.onload = function() {
+      window.print();
+      // Close the helper window after the print dialog is dismissed
+      window.onafterprint = function() { window.close(); };
+      // Fallback close for browsers that don't support onafterprint (e.g. older Safari)
+      setTimeout(function() { window.close(); }, 8000);
+    };
+  <\/script>
+</body>
+</html>`;
+
+    // Open new window — mobile browsers print from a fully-loaded window reliably
+    const pw = window.open('', '_blank', 'width=900,height=700');
+    if (!pw) {
+      alert('Popup blocked. Please allow popups for this page and try again.');
+      return;
+    }
+    pw.document.open();
+    pw.document.write(printDoc);
+    pw.document.close();
+  });
+}
+
+function showExportMenu() {
+  const choice = prompt('Export options:\n\n1. Print / Save as PDF\n2. Export incidents as CSV\n3. Export teacher summary as CSV\n4. Backup data as JSON\n\nEnter 1, 2, 3 or 4:');
+  if (choice==='1') printPage(currentTab);
+  else if (choice==='2') exportCSV('incidents');
+  else if (choice==='3') exportCSV('summary');
+  else if (choice==='4') exportBackup();
+}
+
+function exportCSV(type) {
+  let rows, filename;
+  if (type === 'incidents') {
+    const headers = ['Date','Teacher','Subject','Employee ID','Incident Type','Class/Period','Arrival Time','Departure Time','Ghost Attendance','Proxy Sent','Proxy Name','Notes','Logged At'];
+    rows = [headers, ...state.incidents.sort((a,b)=>b.date.localeCompare(a.date)).map(i => { const t=state.teachers.find(x=>x.id===i.tid); return [i.date,t?.name||'',t?.subject||'',t?.empid||'',TYPE_LABELS[i.type]||i.type,i.cls||'',i.arrival||'',i.depart||'',i.ghost||'',i.proxy||'',i.proxyName||'',(i.notes||'').replace(/,/g,'；'),i.logged||'']; })];
+    filename = `teacher_incidents_${today()}.csv`;
+  } else {
+    const headers = ['Teacher','Subject','Classes','Employee ID','Total',...Object.values(TYPE_LABELS)];
+    rows = [headers, ...state.teachers.map(t => { const tdata=state.incidents.filter(i=>i.tid===t.id); const by={}; Object.keys(TYPE_LABELS).forEach(k=>by[k]=0); tdata.forEach(i=>by[i.type]++); return [t.name,t.subject||'',t.classes||'',t.empid||'',tdata.length,...Object.keys(TYPE_LABELS).map(k=>by[k])]; })];
+    filename = `teacher_summary_${today()}.csv`;
+  }
+  downloadFile(rows.map(r=>r.map(v=>`"${v}"`).join(',')).join('\n'), filename, 'text/csv');
+}
+
+function exportBackup() { downloadFile(JSON.stringify(state,null,2),`teachertrack_backup_${today()}.json`,'application/json'); }
+
+function restoreBackup(input) {
+  const file = input.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.teachers || !data.incidents) { alert('Invalid backup file.'); return; }
+      if (!confirm(`Restore backup?\nTeachers: ${data.teachers.length}, Incidents: ${data.incidents.length}`)) return;
+      state = data; save(); populateDropdowns(); renderLog(); renderSetup();
+      switchTab('log'); alert('Backup restored.');
+    } catch(err) { alert('Could not read backup file.'); }
+  };
+  reader.readAsText(file); input.value = '';
+}
+
+function downloadFile(content, filename, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename; document.body.appendChild(a); a.click();
+  document.body.removeChild(a); URL.revokeObjectURL(url);
+}
+
+function clearAllData() {
+  if (!confirm('DELETE ALL DATA? This cannot be undone.')) return;
+  if (prompt('Type YES to delete everything:') !== 'YES') { alert('Cancelled.'); return; }
+  state = { teachers: [], incidents: [], settings: { school: '', year: '', principal: '', schoolEndTime: '' }, theme: state.theme || 'classic' };
+  save(); populateDropdowns(); renderLog(); renderSetup(); alert('All data deleted.');
+}
+
+// ==========================================
+//  MESSAGES
+// ==========================================
+const _msgTimers = {};
+function showMsg(id, msg, type) {
+  const el = document.getElementById(id); if (!el) return;
+  if (_msgTimers[id]) { clearTimeout(_msgTimers[id]); delete _msgTimers[id]; }
+  el.innerHTML = `<div class="alert alert-${type}">${msg}</div>`;
+  _msgTimers[id] = setTimeout(() => { el.innerHTML = ''; delete _msgTimers[id]; }, 3500);
+}
+
+// ==========================================
+//  PWA
+// ==========================================
+let deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferredPrompt = e; document.getElementById('install-banner').classList.add('show'); });
+function installApp() { if (!deferredPrompt) return; deferredPrompt.prompt(); deferredPrompt.userChoice.then(() => { deferredPrompt = null; document.getElementById('install-banner').classList.remove('show'); }); }
+function dismissInstall() { document.getElementById('install-banner').classList.remove('show'); }
+window.addEventListener('appinstalled', () => document.getElementById('install-banner').classList.remove('show'));
+window.addEventListener('offline', () => document.getElementById('offline-badge').style.display = 'block');
+window.addEventListener('online', () => document.getElementById('offline-badge').style.display = 'none');
+
+const SW_CODE = `const CACHE='tt-v2';self.addEventListener('install',e=>e.waitUntil(caches.open(CACHE).then(c=>c.addAll([self.registration.scope])).then(()=>self.skipWaiting())));self.addEventListener('activate',e=>e.waitUntil(clients.claim()));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request).then(res=>{const cl=res.clone();caches.open(CACHE).then(c=>c.put(e.request,cl));return res;}).catch(()=>caches.match(e.request)))));`;
+if ('serviceWorker' in navigator) { const swBlob = new Blob([SW_CODE], { type: 'text/javascript' }); navigator.serviceWorker.register(URL.createObjectURL(swBlob), { scope: './' }).catch(() => {}); }
+
+// ==========================================
+//  INIT
+// ==========================================
+// Restore theme
+const savedTheme = state.theme || 'classic';
+document.documentElement.setAttribute('data-theme', savedTheme);
+document.querySelectorAll('.theme-option').forEach(el => el.classList.toggle('active', el.dataset.t === savedTheme));
+
+document.getElementById('dash-date').value = today();
+if (state.settings?.schoolEndTime) document.getElementById('school-end-time').value = state.settings.schoolEndTime;
+if (state.settings?.school) document.getElementById('school-name-display').textContent = state.settings.school;
+populateDropdowns();
+renderLog();
+</script>
+</body>
+</html>
